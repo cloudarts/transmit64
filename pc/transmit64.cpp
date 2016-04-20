@@ -1,8 +1,9 @@
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
-bool printUsage(char* progName)
+void printUsage(char* progName)
 {
 	cout << endl;
 	cout << "Usage: " << endl;
@@ -21,5 +22,29 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
+	ifstream ifs(argv[1], ios_base::in | ios_base::binary);
+
+	if( !ifs )
+	{
+		cerr << "Error reading file " << argv[1] << endl;
+		return -1;
+	}
+
+	char currentChar;
+	while (ifs.read(&currentChar, 1) )
+	{
+		cout << currentChar;	
+	}
+
+	cout << endl;
+
+	if (ifs.eof())
+	{
+		cout << "EOF reached." << endl;
+	}
+	else
+	{
+		cerr << "Error reading file." << endl;
+	}
 	return 0;
 }
