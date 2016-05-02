@@ -27,7 +27,7 @@ serialPort.on("open", function() {
 		var position = 0;
 
 		serialPort.on('data', function(serialData) {
-			//console.log("received data from serial: " + serialData);
+			console.log("received data from serial: " + serialData);
 			if( serialData == "o" ) {
 				console.log(">> ok");
 				if( position === fileData.length ) {

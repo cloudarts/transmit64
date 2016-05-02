@@ -6,10 +6,20 @@
 
 #define BAUD_RATE 9600
 #define LED_PIN 13
+#define CLOCK_PIN 10
+#define DATA_PIN 11
+#define CLOCK_DELAY 100
 
 void setup()
 {
   pinMode(LED_PIN, OUTPUT);
+  pinMode(CLOCK_PIN, OUTPUT);
+  pinMode(DATA_PIN, OUTPUT);
+
+  digitalWrite(LED_PIN, LOW);
+  digitalWrite(CLOCK_PIN, LOW);
+  digitalWrite(DATA_PIN, LOW);
+  
   Serial.begin(BAUD_RATE);
   
   // inform PC that we're waiting
@@ -27,16 +37,8 @@ bool readSerial()
   {
     byte buf;
     Serial.readBytes(&buf, 1);
-    if ( buf == 97 )
-    {
-      //blink(2, 500);
-      Serial.print("o");
-    }
-    else
-    {
-      Serial.print(byteToString(buf));
-      //blink(3, 1000);
-    }
+    writeToC64(buf);
+    Serial.print("o");
   }
 }
 
@@ -62,5 +64,28 @@ String byteToString(const byte& input)
 
   return ret;
 }
+
+void writeToC64(byte input)
+{
+  for( int i = 0; i < 8; i++ )
+  {
+    bool bitIsSet = (input >> i) & 0x1;
+    writeBit(bitIsSet);
+  }
+}
+
+void writeBit(bool value)
+{
+  digitalWrite(CLOCK_PIN, LOW);
+  digitalWrite(DATA_PIN, LOW);
+  digitalWrite(LED_PIN, LOW);
+  delay(CLOCK_DELAY);
+  
+  digitalWrite(DATA_PIN, value ? HIGH : LOW);
+  digitalWrite(CLOCK_PIN, HIGH);
+  digitalWrite(LED_PIN, HIGH);
+  delay(CLOCK_DELAY);
+}
+
 
 
