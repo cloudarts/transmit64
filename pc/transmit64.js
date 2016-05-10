@@ -7,6 +7,8 @@ if( !argv.f || !argv.s ) {
 	process.exit(1);
 }
 
+console.log("DON'T start the C64 client yet! Wait for Arduino warmup...");
+
 var serialPort = new SerialPort(argv.s, { baudrate:9600 });
 
 serialPort.on("error", function(error){
@@ -14,6 +16,10 @@ serialPort.on("error", function(error){
 	process.exit(1);
 });
 
+// the C64 client may not be running while the Arduino is starting up.
+// it will receiver false data during warmup
+// so, the first write will be delayed until user confirmation that the client has been started
+var firstWrite = true;
 
 serialPort.on("open", function() {
 	console.log("serial port open, opening file...\n");
@@ -47,13 +53,22 @@ serialPort.on("open", function() {
 
 
 var sendByte = function(data) {
-	console.log("<< " + data);
-	var buffer = new Buffer(data);
-	serialPort.write(buffer, (error, bytesWritten) => {
-		if( error ) {
-			console.error("error writing " + data + ": " + error);
-			process.exit(1);
-		}
-	});
+	var delay = 0;
+	if( firstWrite ) {
+		delay = 5000;
+		firstWrite = false;
+		console.log("start C64 client NOW...");
+	}
+
+	setTimeout(function() {
+		console.log("<< " + data);
+		var buffer = new Buffer(data);
+		serialPort.write(buffer, (error, bytesWritten) => {
+			if( error ) {
+				console.error("error writing " + data + ": " + error);
+				process.exit(1);
+			}
+		});
+	}, delay);
 }
 

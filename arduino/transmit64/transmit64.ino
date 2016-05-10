@@ -7,11 +7,13 @@
 #define BAUD_RATE 9600
 #define LED_PIN 13
 #define CLOCK_PIN 10
-#define DATA_PIN 11
+#define DATA_PIN 7
 #define CLOCK_DELAY 100
 
 void setup()
 {
+  Serial.begin(BAUD_RATE);
+  
   pinMode(LED_PIN, OUTPUT);
   pinMode(CLOCK_PIN, OUTPUT);
   pinMode(DATA_PIN, OUTPUT);
@@ -19,8 +21,6 @@ void setup()
   digitalWrite(LED_PIN, LOW);
   digitalWrite(CLOCK_PIN, LOW);
   digitalWrite(DATA_PIN, LOW);
-  
-  Serial.begin(BAUD_RATE);
   
   // inform PC that we're waiting
   Serial.print("o");
@@ -76,14 +76,14 @@ void writeToC64(byte input)
 
 void writeBit(bool value)
 {
-  digitalWrite(CLOCK_PIN, LOW);
-  digitalWrite(DATA_PIN, LOW);
-  digitalWrite(LED_PIN, LOW);
-  delay(CLOCK_DELAY);
-  
   digitalWrite(DATA_PIN, value ? HIGH : LOW);
   digitalWrite(CLOCK_PIN, HIGH);
   digitalWrite(LED_PIN, HIGH);
+  delay(CLOCK_DELAY);
+  
+  digitalWrite(CLOCK_PIN, LOW);
+  digitalWrite(DATA_PIN, LOW);
+  digitalWrite(LED_PIN, LOW);
   delay(CLOCK_DELAY);
 }
 
