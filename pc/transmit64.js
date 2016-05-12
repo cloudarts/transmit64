@@ -63,11 +63,15 @@ var sendByte = function(data) {
 	setTimeout(function() {
 		console.log("<< " + data);
 		var buffer = new Buffer(data);
+		if( buffer.length == 2) {
+			buffer = buffer.slice(1);
+		}
 		serialPort.write(buffer, (error, bytesWritten) => {
 			if( error ) {
 				console.error("error writing " + data + ": " + error);
 				process.exit(1);
 			}
+			console.log("<< " + parseInt(data, 10));
 		});
 	}, delay);
 }
