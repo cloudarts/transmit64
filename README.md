@@ -1,2 +1,3 @@
 # transmit64
-An experimental data transmitter from PC to C64 via Arduino
+An experimental data transmitter from PC to C64 via Arduino.
+Stil very much WIP.
