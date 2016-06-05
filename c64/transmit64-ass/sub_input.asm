@@ -6,7 +6,7 @@
 // out: A = save address, X length of str
 
 .const KEY_ENTER = $0D
-.const MAX_LENGTH = 5
+.const MAX_LENGTH = 16
 
 sub_input:			ldx #0
 					stx sub_input_counter	// reset sub_input_counter
@@ -28,7 +28,6 @@ sub_input_loop:		jsr $ff9f				// read keyboard, uses a,x,y
 sub_input_end:		lda #0					// append terminator char
 					ldx sub_input_counter
 					sta sub_input_buff, x	
-					lda #<sub_input_buff
 					rts
 					
 sub_input_counter:	.byte 0
