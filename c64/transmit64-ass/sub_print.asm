@@ -11,6 +11,7 @@
 //  changes: A, X, Y, $FD, $FE
 
 .import source "sub_mul.asm"
+.import source "sub_petscii2screencode.asm"
 
 .const SCR_BEGIN_H = $04 // the screen buffer starts at $0400 (40x25)
 .const NUM_COLS = 25
@@ -35,9 +36,10 @@ sub_print:          lda #0
                     // start printing
                     ldy #0
 sub_print_loop:     lda ($FB),y             // load character
-                    cmp #0
+                    cmp #0  
                     beq sub_print_exit
-                    sta ($FD),y             // write at
+                    jsr sub_petscii2screencode
+                    sta ($FD),y             // write to screen
                     iny
                     jmp sub_print_loop
                     
