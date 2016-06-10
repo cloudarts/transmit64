@@ -10,7 +10,7 @@ start:	jsr sub_input        // get input
         sta $FB
         lda #>sub_input_buff
         sta $FC
-        ldx #2              // set output colum
-        ldy #10             // set output row
+        ldx #3              // set output colum
+        ldy #15             // set output row
         jsr sub_print       // print        
 		rts
