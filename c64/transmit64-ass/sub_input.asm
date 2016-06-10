@@ -3,7 +3,7 @@
 // simple INPUT for max 16 characters
 // in: -
 // will change A, X
-// out: A = save address, X length of str
+// out: X length of str
 
 .const KEY_ENTER = $0D
 .const MAX_LENGTH = 16
@@ -31,4 +31,4 @@ sub_input_end:		lda #0					// append terminator char
 					rts
 					
 sub_input_counter:	.byte 0
-sub_input_buff:		.fill MAX_LENGTH+1, 1			// generates 16 zero-bytes as buffer, +1 for \0
+sub_input_buff:		.fill MAX_LENGTH+1, 0			// generates 16 zero-bytes as buffer, +1 for \0
